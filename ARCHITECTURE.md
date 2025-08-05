@@ -4,7 +4,7 @@
 
 ```
 src/
-├── 🎹 midi-hooks.ts              # Main library entry point
+├── 🎹 usemidi.ts                 # Main library entry point
 ├── 📱 MidiDemo.tsx               # Example demo application
 ├── 📱 MidiDemo.css               # Demo styling
 ├── 📱 App.tsx                    # React app entry
@@ -75,11 +75,11 @@ Shared MIDI processing functions moved to dedicated utils:
 Import only what you need:
 
 ```typescript
-// Import specific hooks
-import { useSlider } from "./hooks/useSlider"
+import { useSlider, formatMIDIMessage } from "usemidi"
 
-// Import specific utilities
-import { parseMIDIMessage, formatMIDIMessage } from "./utils/midiUtils"
+// Or specific imports:
+import { useSlider } from "usemidi/hooks/useSlider"
+import { parseMIDIMessage } from "usemidi/utils/midiUtils"
 ```
 
 ### **3. Easier Testing**

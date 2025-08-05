@@ -1,0 +1,42 @@
+# Source files
+src/
+public/
+index.html
+
+# Development files
+.vscode/
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Build tools
+vite.config.ts
+tsconfig.json
+tsconfig.app.json
+tsconfig.node.json
+eslint.config.js
+
+# Dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Misc
+.DS_Store
+*.local
+
+# Testing
+coverage/
+
+# Development build
+dist-dev/
+
+# Keep only the library build
+!dist/

@@ -1,6 +1,6 @@
-# 🎹 MIDI Hooks Library
+# 🎹 useMidi
 
-A React library for creating MIDI-controlled UI components. Build responsive, interactive interfaces that connect directly to MIDI controllers with ease.
+React hooks for MIDI controllers. Build responsive, interactive interfaces that connect directly to MIDI hardware with ease.
 
 ## Features
 
@@ -15,7 +15,7 @@ A React library for creating MIDI-controlled UI components. Build responsive, in
 ## Quick Start
 
 ```bash
-npm install midi-hooks
+npm install usemidi
 ```
 
 ### Basic Usage
@@ -26,7 +26,7 @@ import {
   SliderComponent,
   KnobComponent,
   ButtonComponent,
-} from "midi-hooks"
+} from "usemidi"
 
 function App() {
   return (
@@ -130,7 +130,7 @@ Real-time MIDI message inspector.
 ### Custom Hook Implementation
 
 ```jsx
-import { useMidiContext } from "midi-hooks"
+import { useMidiContext } from "usemidi"
 import { useEffect, useState } from "react"
 
 function useCustomMidiControl(ccNumber) {
@@ -180,7 +180,7 @@ Map MIDI values (0-127) to any range:
 Full TypeScript support included:
 
 ```typescript
-import { MIDIMessage, MIDIDevice, SliderHookReturn } from "midi-hooks"
+import { MIDIMessage, MIDIDevice, SliderHookReturn } from "usemidi"
 
 const config: SliderHookReturn = {
   value: 0,
@@ -196,7 +196,7 @@ MIT
 
 ## Contributing
 
-1. Fork the repository
+1. Fork the repository at https://github.com/eeeurico/usemidi
 2. Create a feature branch
 3. Make your changes
 4. Add tests
@@ -204,4 +204,4 @@ MIT
 
 ---
 
-Built with ❤️ for the MIDI community
+Built with ❤️ for the MIDI community by [Eurico Sá Fernandes](https://github.com/eeeurico)
