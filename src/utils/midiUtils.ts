@@ -2,7 +2,6 @@ import type { MIDIMessage } from "../hooks/useMidi"
 
 // Parse MIDI message
 export const parseMIDIMessage = (data: Uint8Array): MIDIMessage | null => {
-  console.log("Parsing MIDI message:", data)
   if (data.length < 3) return null
 
   const [status, data1, data2] = data
@@ -21,35 +20,6 @@ export const parseMIDIMessage = (data: Uint8Array): MIDIMessage | null => {
         channel,
         controller: data1,
         value: data2,
-        raw: data,
-      }
-    case 0x90: // Note On
-      return {
-        id,
-        timestamp,
-        type: data2 > 0 ? "note_on" : "note_off", // Note On with velocity 0 is Note Off
-        channel,
-        note: data1,
-        velocity: data2,
-        raw: data,
-      }
-    case 0x80: // Note Off
-      return {
-        id,
-        timestamp,
-        type: "note_off",
-        channel,
-        note: data1,
-        velocity: data2,
-        raw: data,
-      }
-    case 0xe0: // Pitch Bend
-      return {
-        id,
-        timestamp,
-        type: "pitch_bend",
-        channel,
-        value: (data2 << 7) | data1, // Combine data1 and data2 for pitch bend value
         raw: data,
       }
     default:
