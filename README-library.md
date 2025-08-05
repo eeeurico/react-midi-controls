@@ -4,13 +4,12 @@ A React library for creating MIDI-controlled UI components. Build responsive, in
 
 ## Features
 
-- **Unified MIDI Hook**: `useSlider` for all absolute controls (sliders, knobs, faders)
-- **Button Controls**: `useButton` for pads, switches, and buttons
+- **Easy MIDI Hooks**: `useSlider`, `useButton`, `useDebugger`
 - **Pre-built Components**: Ready-to-use MIDI-responsive UI components
 - **TypeScript Support**: Full type safety and IntelliSense
-- **Context-based**: Efficient MIDI message handling across components
-- **CC-Only Focus**: Simplified for Control Change messages only
+- **Flexible Configuration**: Customizable ranges, channels, and mappings
 - **Real-time Debugging**: Built-in MIDI message inspector
+- **Context-based**: Efficient MIDI message handling across components
 
 ## Quick Start
 
@@ -35,7 +34,9 @@ function App() {
 
       <MidiControlPanel>
         <SliderComponent ccNumber={7} label="Volume" range={[0, 100]} />
+
         <KnobComponent ccNumber={74} label="Filter Cutoff" range={[0, 127]} />
+
         <ButtonComponent ccNumber={64} label="Sustain Pedal" />
       </MidiControlPanel>
     </MidiProvider>
@@ -45,30 +46,30 @@ function App() {
 
 ## Hooks
 
-### `useSlider({ ccNumber, range, defaultValue })`
+### `useSlider(ccNumber, range, config)`
 
-Creates an absolute MIDI control that returns the mapped value directly.
+Creates an absolute MIDI control (0-127 maps to your range).
 
 ```jsx
-const volume = useSlider({ ccNumber: 7, range: [0, 100] })
-const cutoff = useSlider({
-  ccNumber: 74,
-  range: [20, 20000],
-  defaultValue: 1000,
+const slider = useSlider(7, [0, 100], {
+  channel: 1,
+  min: 0,
+  max: 127,
 })
 
-// Returns: number (the mapped value)
+// Returns: { value, rawValue, isActive, reset, handleMIDIMessage }
 ```
 
-### `useButton({ ccNumber, defaultValue })`
+**Note**: `useKnob` has been removed. Both slider and knob components now use `useSlider` for unified behavior.
 
-Creates a button/pad control that returns a boolean value directly.
+### `useButton(ccNumber, config)`
+
+Creates a button/pad control.
 
 ```jsx
-const sustain = useButton({ ccNumber: 64 })
-const mute = useButton({ ccNumber: 65, defaultValue: true })
+const button = useButton(64, { channel: 1 })
 
-// Returns: boolean (true when pressed, false when released)
+// Returns: { isPressed, pressCount, lastPressTime, handleMIDIMessage }
 ```
 
 ### `useDebugger(filter)`
@@ -77,6 +78,7 @@ Debug MIDI messages with optional filtering.
 
 ```jsx
 const debugger = useDebugger({
+  channel: 1,
   type: 'controller'
 })
 
@@ -94,15 +96,18 @@ A visual slider that responds to MIDI CC messages.
   ccNumber={1} // MIDI CC number
   label="Modulation" // Display label
   range={[0, 100]} // Output range
+  channel={1} // MIDI channel
+  min={0} // Min MIDI value
+  max={127} // Max MIDI value
 />
 ```
 
 ### `<KnobComponent>`
 
-A rotary knob for absolute controls (uses `useSlider` internally).
+A rotary knob for relative controls.
 
 ```jsx
-<KnobComponent ccNumber={74} label="Cutoff" range={[0, 127]} />
+<KnobComponent ccNumber={74} label="Cutoff" range={[0, 127]} channel={1} />
 ```
 
 ### `<ButtonComponent>`
@@ -110,7 +115,7 @@ A rotary knob for absolute controls (uses `useSlider` internally).
 A button that lights up when pressed.
 
 ```jsx
-<ButtonComponent ccNumber={64} label="Sustain" />
+<ButtonComponent ccNumber={64} label="Sustain" channel={1} />
 ```
 
 ### `<DebuggerComponent>`
@@ -120,6 +125,7 @@ Real-time MIDI message inspector.
 ```jsx
 <DebuggerComponent
   filter={{
+    channel: 1,
     type: "controller",
   }}
 />
@@ -139,9 +145,10 @@ function useCustomMidiControl(ccNumber) {
 
   useEffect(() => {
     const handleMessage = (event) => {
-      const message = parseMIDIMessage(event.data)
-      if (message.type === "controller" && message.ccNumber === ccNumber) {
-        setValue(message.value)
+      // Parse MIDI message
+      const [status, cc, val] = event.data
+      if ((status & 0xf0) === 0xb0 && cc === ccNumber) {
+        setValue(val)
       }
     }
 
@@ -169,6 +176,29 @@ Map MIDI values (0-127) to any range:
 <SliderComponent range={[0, 100]} />
 ```
 
+### Channel Filtering
+
+```jsx
+// Only respond to channel 1
+<SliderComponent channel={1} />
+
+// Multi-channel setup
+<SliderComponent ccNumber={7} channel={1} label="Ch1 Volume" />
+<SliderComponent ccNumber={7} channel={2} label="Ch2 Volume" />
+```
+
+### Custom MIDI Ranges
+
+```jsx
+// Use only part of MIDI range (for fine control)
+<SliderComponent
+  ccNumber={1}
+  min={32} // Start at MIDI value 32
+  max={96} // End at MIDI value 96
+  range={[0, 100]}
+/>
+```
+
 ## Browser Support
 
 - Chrome/Edge: ✅ Full support
@@ -180,19 +210,19 @@ Map MIDI values (0-127) to any range:
 Full TypeScript support included:
 
 ```typescript
-import { MIDIMessage, MIDIDevice, SliderHookReturn } from "midi-hooks"
+import { MIDIMessage, MIDIDevice, MIDIControlConfig } from "midi-hooks"
 
-const config: SliderHookReturn = {
-  value: 0,
-  rawValue: 0,
-  isActive: false,
-  handleMIDIMessage: () => {},
+const config: MIDIControlConfig = {
+  channel: 1,
+  min: 0,
+  max: 127,
+  defaultValue: 64,
 }
 ```
 
 ## License
 
-MIT
+MIT © [Your Name]
 
 ## Contributing
 

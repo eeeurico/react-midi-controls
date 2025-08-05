@@ -1,0 +1,142 @@
+/* Device Selector Styles */
+
+.device-selector {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.device-selector h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.device-selector.error {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.error-message h3 {
+  color: #721c24;
+  margin-bottom: 10px;
+}
+
+.error-message p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.no-devices {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+}
+
+.no-devices p {
+  margin: 5px 0;
+}
+
+.device-list {
+  display: grid;
+  gap: 10px;
+}
+
+.device-button {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.device-button:hover:not(:disabled) {
+  border-color: #0084ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.device-button.selected {
+  border-color: #0084ff;
+  background: #e6f3ff;
+}
+
+.device-button.disconnected {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.device-button:disabled {
+  cursor: not-allowed;
+}
+
+.device-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.device-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+}
+
+.device-manufacturer {
+  font-size: 12px;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.device-status {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-connected {
+  color: #28a745;
+}
+
+.status-available {
+  color: #007bff;
+}
+
+.status-disconnected {
+  color: #6c757d;
+}
+
+.connection-status {
+  margin-top: 15px;
+  padding: 10px;
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 4px;
+  color: #155724;
+}
+
+.connection-status p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .device-selector {
+    padding: 15px;
+  }
+
+  .device-button {
+    padding: 12px;
+  }
+
+  .device-name {
+    font-size: 14px;
+  }
+}
