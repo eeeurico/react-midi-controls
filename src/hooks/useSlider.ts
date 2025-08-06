@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react"
 import { useMidiContext } from "../contexts/MidiContext"
 import { parseMIDIMessage, mapRange } from "../utils/midiUtils"
+import type { SliderConfig } from "./types"
 
 // Hook for MIDI sliders (absolute control)
 export const useSlider = ({
@@ -9,13 +10,7 @@ export const useSlider = ({
   defaultValue = 0,
   min = 0,
   max = 127,
-}: {
-  ccNumber: number
-  range?: [number, number]
-  defaultValue?: number
-  min?: number
-  max?: number
-}) => {
+}: SliderConfig): number => {
   const [rawValue, setRawValue] = useState(defaultValue)
   const lastMessageTime = useRef(0)
   const { addMessageHandler } = useMidiContext()

@@ -1,25 +1,5 @@
 import { useState, useEffect, useCallback } from "react"
-
-export interface MIDIMessage {
-  id: number
-  timestamp: number
-  type: string
-  channel: number
-  note?: number
-  velocity?: number
-  controller?: number
-  value?: number
-  raw: Uint8Array
-}
-
-export interface MIDIDevice {
-  id: string
-  name: string
-  manufacturer?: string
-  type: "input" | "output"
-  state: string
-  connection: string
-}
+import type { MIDIMessage, MIDIDevice } from "./types"
 
 // Main MIDI context hook
 export const useMidi = () => {

@@ -1,5 +1,5 @@
 import React from "react"
-import { useMidiContext } from "../contexts/MidiContext"
+import { useMidiDevices } from "../hooks/useMidiDevices"
 import "./DeviceSelector.css"
 
 export const DeviceSelector: React.FC = () => {
@@ -8,15 +8,17 @@ export const DeviceSelector: React.FC = () => {
     selectedDevice,
     isConnected,
     error,
-    connectToDevice,
+    isLoading,
+    selectDeviceById,
     disconnect,
-  } = useMidiContext()
+    refreshDevices,
+  } = useMidiDevices()
 
   const handleDeviceSelect = (deviceId: string) => {
     if (selectedDevice?.id === deviceId) {
       disconnect()
     } else {
-      connectToDevice(deviceId)
+      selectDeviceById(deviceId)
     }
   }
 
@@ -26,6 +28,17 @@ export const DeviceSelector: React.FC = () => {
         <div className="error-message">
           <h3>MIDI Error</h3>
           <p>{error}</p>
+          <button onClick={refreshDevices}>Retry</button>
+        </div>
+      </div>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <div className="device-selector">
+        <div className="loading-message">
+          <h3>Loading MIDI Devices...</h3>
         </div>
       </div>
     )
@@ -40,6 +53,7 @@ export const DeviceSelector: React.FC = () => {
         <div className="no-devices">
           <p>No MIDI input devices found.</p>
           <p>Please connect a MIDI device and refresh the page.</p>
+          <button onClick={refreshDevices}>Refresh</button>
         </div>
       ) : (
         <div className="device-list">
@@ -80,6 +94,7 @@ export const DeviceSelector: React.FC = () => {
           <p>
             ✓ Connected to: <strong>{selectedDevice.name}</strong>
           </p>
+          <button onClick={disconnect}>Disconnect</button>
         </div>
       )}
     </div>

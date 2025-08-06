@@ -1,4 +1,4 @@
-import type { MIDIMessage } from "../hooks/useMidi"
+import type { MIDIMessage } from "../hooks/types"
 
 // Parse MIDI message
 export const parseMIDIMessage = (data: Uint8Array): MIDIMessage | null => {

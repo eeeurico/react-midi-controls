@@ -1,11 +1,7 @@
 import { useState, useCallback, useEffect } from "react"
 import { useMidiContext } from "../contexts/MidiContext"
 import { parseMIDIMessage } from "../utils/midiUtils"
-import type { MIDIMessage } from "./useMidi"
-
-export interface DebuggerConfig {
-  maxMessages?: number
-}
+import type { MIDIMessage, DebuggerConfig } from "./types"
 
 // Hook for debugging MIDI messages
 export const useDebugger = (config: DebuggerConfig = {}) => {

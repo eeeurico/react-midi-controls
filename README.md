@@ -1,6 +1,6 @@
-# 🎹 useMidi
+# 🎹 react-midi-controls
 
-React hooks for MIDI controllers. Build responsive, interactive interfaces that connect directly to MIDI hardware with ease.
+React hooks and components for MIDI controllers. Build responsive, interactive interfaces that connect directly to MIDI hardware with ease.
 
 ## Features
 
@@ -15,7 +15,7 @@ React hooks for MIDI controllers. Build responsive, interactive interfaces that 
 ## Quick Start
 
 ```bash
-npm install usemidi
+npm install react-midi-controls
 ```
 
 ### Basic Usage
@@ -26,7 +26,7 @@ import {
   SliderComponent,
   KnobComponent,
   ButtonComponent,
-} from "usemidi"
+} from "react-midi-controls"
 
 function App() {
   return (
@@ -130,7 +130,7 @@ Real-time MIDI message inspector.
 ### Custom Hook Implementation
 
 ```jsx
-import { useMidiContext } from "usemidi"
+import { useMidiContext } from "react-midi-controls"
 import { useEffect, useState } from "react"
 
 function useCustomMidiControl(ccNumber) {
@@ -180,7 +180,7 @@ Map MIDI values (0-127) to any range:
 Full TypeScript support included:
 
 ```typescript
-import { MIDIMessage, MIDIDevice, SliderHookReturn } from "usemidi"
+import { MIDIMessage, MIDIDevice, SliderHookReturn } from "react-midi-controls"
 
 const config: SliderHookReturn = {
   value: 0,

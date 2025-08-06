@@ -1,15 +1,13 @@
 import { useState, useCallback, useEffect } from "react"
 import { useMidiContext } from "../contexts/MidiContext"
 import { parseMIDIMessage } from "../utils/midiUtils"
+import type { ButtonConfig } from "./types"
 
 // Hook for MIDI buttons/pads (on/off control)
 export const useButton = ({
   ccNumber,
   defaultValue = false,
-}: {
-  ccNumber: number
-  defaultValue?: boolean
-}) => {
+}: ButtonConfig): boolean => {
   const [value, setValue] = useState(defaultValue)
   const { addMessageHandler } = useMidiContext()
 

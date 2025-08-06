@@ -2,6 +2,9 @@
 export { useSlider } from "./hooks/useSlider"
 export { useButton } from "./hooks/useButton"
 export { useDebugger } from "./hooks/useDebugger"
+export { useMidi } from "./hooks/useMidi"
+export { useMidiControlManager } from "./hooks/useMidiControlManager"
+export { useMidiDevices } from "./hooks/useMidiDevices"
 
 // Components
 export { SliderComponent } from "./components/SliderComponent"
@@ -16,10 +19,23 @@ export { MidiProvider, useMidiContext } from "./contexts/MidiContext"
 
 // Types
 export type {
+  // Configuration types
+  SliderConfig,
+  ButtonConfig,
+  DebuggerConfig,
+
+  // MIDI types
+  MIDIMessage,
+  MIDIDevice,
+
+  // Hook result types
+  DebuggerHookResult,
+  UseMidiDevicesResult,
+
+  // Legacy compatibility types
   MIDIControlConfig,
   MidiHookResult,
   ButtonHookResult,
-  DebuggerHookResult,
 } from "./hooks/types"
 
 // Utils
