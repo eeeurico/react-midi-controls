@@ -3,6 +3,12 @@ src/
 public/
 index.html
 
+# Documentation and examples (keep README.md)
+docs/
+examples/
+*.md
+!README.md
+
 # Development files
 .vscode/
 .env
@@ -10,13 +16,22 @@ index.html
 .env.development
 .env.test
 .env.production
+node_modules/
+.git/
+.gitignore
 
 # Build tools
 vite.config.ts
 tsconfig.json
 tsconfig.app.json
 tsconfig.node.json
+tsconfig.lib.json
 eslint.config.js
+pnpm-lock.yaml
+
+# Test files
+**/*.test.*
+**/*.spec.*
 
 # Dependencies
 node_modules/
