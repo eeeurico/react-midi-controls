@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
       build: {
         lib: {
           entry: "src/index.ts",
-          name: "UseMidi",
+          name: "ReactMidiControls",
           formats: ["es", "cjs"],
           fileName: (format) => `index.${format === "es" ? "es" : "cjs"}.js`,
         },

@@ -196,7 +196,7 @@ MIT
 
 ## Contributing
 
-1. Fork the repository at https://github.com/eeeurico/usemidi
+1. Fork the repository at https://github.com/eeeurico/react-midi-controls
 2. Create a feature branch
 3. Make your changes
 4. Add tests

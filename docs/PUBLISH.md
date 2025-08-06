@@ -1,10 +1,10 @@
-# useMidi Publishing Checklist
+# react-midi-controls Publishing Checklist
 
 ## ✅ Pre-Publishing Setup Complete
 
-- [x] Package name: `usemidi`
+- [x] Package name: `react-midi-controls`
 - [x] Author: Eurico Sá Fernandes
-- [x] Repository: https://github.com/eeeurico/usemidi
+- [x] Repository: https://github.com/eeeurico/react-midi-controls
 - [x] License: MIT
 - [x] Main entry points configured
 - [x] Build system working
@@ -17,10 +17,10 @@
 ### 1. Check Package Name Availability
 
 ```bash
-npm search usemidi
+npm search react-midi-controls
 ```
 
-Or visit: https://www.npmjs.com/package/usemidi
+Or visit: https://www.npmjs.com/package/react-midi-controls
 
 ### 2. Setup NPM Account
 
@@ -37,7 +37,7 @@ npm login
 
 ```bash
 npm run build:lib
-npm pack  # Creates usemidi-1.0.0.tgz to inspect
+npm pack  # Creates react-midi-controls-1.0.0.tgz to inspect
 ```
 
 ### 5. Publish to NPM
@@ -49,17 +49,17 @@ npm publish
 ### 6. Verify Publication
 
 ```bash
-npm view usemidi
+npm view react-midi-controls
 ```
 
 ## 📦 Package Structure Ready
 
 ```
-usemidi/
+react-midi-controls/
 ├── dist/
 │   ├── index.es.js      # ES module
 │   ├── index.cjs.js     # CommonJS module
-│   ├── usemidi.css      # Styles
+│   ├── react-midi-controls.css      # Styles
 │   └── *.map            # Source maps
 ├── README.md            # Documentation
 ├── LICENSE              # MIT License
@@ -69,11 +69,11 @@ usemidi/
 ## 🎯 Usage After Publishing
 
 ```bash
-npm install usemidi
+npm install react-midi-controls
 ```
 
 ```jsx
-import { MidiProvider, useSlider, useButton } from "usemidi"
+import { MidiProvider, useSlider, useButton } from "react-midi-controls"
 ```
 
 ## 🔄 Future Updates

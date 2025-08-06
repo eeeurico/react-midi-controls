@@ -1,15 +1,15 @@
 {
-  "name": "react-midi-hooks",
+  "name": "react-midi-controls",
   "version": "1.0.0",
   "description": "React hooks and components for MIDI controller integration",
-  "main": "dist/midi-hooks.js",
-  "module": "dist/midi-hooks.esm.js",
-  "types": "dist/midi-hooks.d.ts",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "vite build --mode library",
+    "build": "vite build --mode lib",
     "build:demo": "vite build",
     "dev": "vite",
     "preview": "vite preview",

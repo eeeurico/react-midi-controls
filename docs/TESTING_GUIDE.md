@@ -12,8 +12,8 @@
 
 ```bash
 # Create a new React app
-npx create-react-app test-usemidi --template typescript
-cd test-usemidi
+npx create-react-app test-react-midi-controls --template typescript
+cd test-react-midi-controls
 
 # Install the local package
 npm install /Users/esf/ESF/Oort/midi-test/react-midi-controls-1.0.0.tgz
@@ -63,7 +63,7 @@ function MidiTestComponent() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>useMidi Package Test</h2>
+      <h2>react-midi-controls Package Test</h2>
 
       <div style={{ marginBottom: "20px" }}>
         <h3>Hook Values (Properly Typed)</h3>
@@ -151,7 +151,7 @@ export default App
   - [ ] `SliderConfig` interface
   - [ ] `ButtonConfig` interface
   - [ ] `MIDIMessage` interface
-- [ ] Type imports work: `import type { SliderConfig } from 'usemidi'`
+- [ ] Type imports work: `import type { SliderConfig } from 'react-midi-controls'`
 
 ## Expected Behavior
 
