@@ -180,13 +180,14 @@ Map MIDI values (0-127) to any range:
 Full TypeScript support included:
 
 ```typescript
-import { MIDIMessage, MIDIDevice, SliderHookReturn } from "react-midi-controls"
+import { useSlider } from "react-midi-controls"
 
-const config: SliderHookReturn = {
-  value: 0,
-  rawValue: 0,
-  isActive: false,
-  handleMIDIMessage: () => {},
+// Example: Type-safe usage in a functional component
+function VolumeControl() {
+  // TypeScript infers the correct types for value and setValue
+  const volume = useSlider({ ccNumber: 7, range: [0, 100] })
+
+  return <div>Volume: {volume}</div>
 }
 ```
 
