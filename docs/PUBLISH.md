@@ -36,7 +36,7 @@ npm login
 ### 4. Final Build & Test
 
 ```bash
-npm run build:lib
+npm run build
 npm pack  # Creates react-midi-controls-1.0.0.tgz to inspect
 ```
 
@@ -59,6 +59,11 @@ react-midi-controls/
 ├── dist/
 │   ├── index.es.js      # ES module
 │   ├── index.cjs.js     # CommonJS module
+│   ├── index.d.ts       # TypeScript declarations
+│   ├── hooks/           # Individual type declarations
+│   ├── components/      # Component type declarations
+│   ├── contexts/        # Context type declarations
+│   ├── utils/           # Utility type declarations
 │   ├── react-midi-controls.css      # Styles
 │   └── *.map            # Source maps
 ├── README.md            # Documentation

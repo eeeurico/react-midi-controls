@@ -1,3 +1,5 @@
+import type { ReactNode } from "react"
+
 // Configuration interfaces
 export interface SliderConfig {
   ccNumber: number
@@ -85,3 +87,94 @@ export interface PitchBendHookResult {
   rawValue: number
   isActive: boolean
 }
+
+// Component Props interfaces
+export interface SliderComponentProps {
+  ccNumber: number
+  label: string
+  defaultValue?: number
+  range?: [number, number]
+  min?: number
+  max?: number
+}
+
+export interface KnobComponentProps {
+  ccNumber: number
+  defaultValue?: number
+  label: string
+  range?: [number, number]
+  min?: number
+  max?: number
+}
+
+export interface ButtonComponentProps {
+  ccNumber: number
+  label: string
+  defaultValue?: boolean
+}
+
+export interface DebuggerComponentProps {
+  maxMessages?: number
+}
+
+export interface MidiControlPanelProps {
+  children: ReactNode
+}
+
+// Context types
+export interface MidiContextType extends UseMidiDevicesResult {
+  addMessageHandler: (handler: (event: any) => void) => () => void
+}
+
+export interface MidiProviderProps {
+  children: ReactNode
+  autoSelectFirstDevice?: boolean
+}
+
+// Utility types
+export type MIDIMessageHandler = (event: any) => void
+export type CleanupFunction = () => void
+
+// Range type for better type safety
+export type Range = [number, number]
+
+// MIDI CC Number type (0-127)
+export type CCNumber = number
+
+// MIDI Channel type (0-15)
+export type MIDIChannel = number
+
+// MIDI Value type (0-127)
+export type MIDIValue = number
+
+// MIDI Note type (0-127)
+export type MIDINote = number
+
+// MIDI Velocity type (0-127)
+export type MIDIVelocity = number
+
+// MIDI Message Types
+export type MIDIMessageType =
+  | "noteoff"
+  | "noteon"
+  | "controlchange"
+  | "pitchbend"
+  | "programchange"
+  | "aftertouch"
+  | "sysex"
+  | "timecode"
+  | "songposition"
+  | "songselect"
+  | "tunerequest"
+  | "timingclock"
+  | "start"
+  | "continue"
+  | "stop"
+  | "activesensing"
+  | "reset"
+
+// MIDI Device State
+export type MIDIDeviceState = "disconnected" | "connected"
+
+// MIDI Device Connection
+export type MIDIDeviceConnection = "open" | "closed" | "pending"

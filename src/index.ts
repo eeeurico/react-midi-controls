@@ -32,10 +32,35 @@ export type {
   DebuggerHookResult,
   UseMidiDevicesResult,
 
+  // Component Props types
+  SliderComponentProps,
+  KnobComponentProps,
+  ButtonComponentProps,
+  DebuggerComponentProps,
+  MidiControlPanelProps,
+
+  // Context types
+  MidiContextType,
+  MidiProviderProps,
+
+  // Utility types
+  MIDIMessageHandler,
+  CleanupFunction,
+  Range,
+  CCNumber,
+  MIDIChannel,
+  MIDIValue,
+  MIDINote,
+  MIDIVelocity,
+  MIDIMessageType,
+  MIDIDeviceState,
+  MIDIDeviceConnection,
+
   // Legacy compatibility types
   MIDIControlConfig,
   MidiHookResult,
   ButtonHookResult,
+  PitchBendHookResult,
 } from "./hooks/types"
 
 // Utils

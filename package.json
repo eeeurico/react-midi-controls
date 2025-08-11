@@ -1,6 +1,6 @@
 {
   "name": "react-midi-controls",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React hooks and components for MIDI controller integration",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
@@ -43,6 +43,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "typescript": "~5.8.3",
-    "vite": "^7.0.4"
+    "vite": "^7.0.4",
+    "vite-plugin-dts": "^4.5.4"
   }
 }

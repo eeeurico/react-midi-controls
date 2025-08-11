@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react"
-import type { MIDIMessage, MIDIDevice } from "./types"
+import type { MIDIDevice } from "./types"
 
 // Main MIDI context hook
 export const useMidi = () => {
