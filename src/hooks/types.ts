@@ -3,6 +3,7 @@ import type { ReactNode } from "react"
 // Configuration interfaces
 export interface SliderConfig {
   ccNumber: number
+  channel?: number // 1-16; listens on all channels when omitted
   range?: [number, number]
   defaultValue?: number
   min?: number
@@ -11,6 +12,7 @@ export interface SliderConfig {
 
 export interface ButtonConfig {
   ccNumber: number
+  channel?: number // 1-16; listens on all channels when omitted
   defaultValue?: boolean
 }
 
@@ -21,9 +23,9 @@ export interface DebuggerConfig {
 // MIDI Message interfaces (matches parseMIDIMessage output)
 export interface MIDIMessage {
   id: number
-  timestamp: number
-  type: string
-  channel: number
+  timestamp: number // Date.now() when parsed
+  type: MIDIMessageType
+  channel?: number // 1-16; absent on system messages
   controller?: number
   value?: number
   note?: number
@@ -39,7 +41,7 @@ export interface MIDIDevice {
   type: "input" | "output"
   state: string
   connection: string
-  input?: any // The actual WebMIDI input device
+  input?: MIDIInput // The actual WebMIDI input device
 }
 
 // Hook result types (simplified - direct values)
@@ -91,6 +93,7 @@ export interface PitchBendHookResult {
 // Component Props interfaces
 export interface SliderComponentProps {
   ccNumber: number
+  channel?: number
   label: string
   defaultValue?: number
   range?: [number, number]
@@ -100,6 +103,7 @@ export interface SliderComponentProps {
 
 export interface KnobComponentProps {
   ccNumber: number
+  channel?: number
   defaultValue?: number
   label: string
   range?: [number, number]
@@ -109,6 +113,7 @@ export interface KnobComponentProps {
 
 export interface ButtonComponentProps {
   ccNumber: number
+  channel?: number
   label: string
   defaultValue?: boolean
 }
@@ -123,7 +128,7 @@ export interface MidiControlPanelProps {
 
 // Context types
 export interface MidiContextType extends UseMidiDevicesResult {
-  addMessageHandler: (handler: (event: any) => void) => () => void
+  addMessageHandler: (handler: MIDIMessageHandler) => CleanupFunction
 }
 
 export interface MidiProviderProps {
@@ -132,7 +137,7 @@ export interface MidiProviderProps {
 }
 
 // Utility types
-export type MIDIMessageHandler = (event: any) => void
+export type MIDIMessageHandler = (event: MIDIMessageEvent) => void
 export type CleanupFunction = () => void
 
 // Range type for better type safety
@@ -141,7 +146,7 @@ export type Range = [number, number]
 // MIDI CC Number type (0-127)
 export type CCNumber = number
 
-// MIDI Channel type (0-15)
+// MIDI Channel type (1-16)
 export type MIDIChannel = number
 
 // MIDI Value type (0-127)
@@ -155,23 +160,25 @@ export type MIDIVelocity = number
 
 // MIDI Message Types
 export type MIDIMessageType =
-  | "noteoff"
-  | "noteon"
-  | "controlchange"
-  | "pitchbend"
-  | "programchange"
-  | "aftertouch"
+  | "note_off"
+  | "note_on"
+  | "poly_aftertouch"
+  | "controller"
+  | "program_change"
+  | "channel_aftertouch"
+  | "pitch_bend"
   | "sysex"
   | "timecode"
-  | "songposition"
-  | "songselect"
-  | "tunerequest"
-  | "timingclock"
+  | "song_position"
+  | "song_select"
+  | "tune_request"
+  | "timing_clock"
   | "start"
   | "continue"
   | "stop"
-  | "activesensing"
+  | "active_sensing"
   | "reset"
+  | "unknown"
 
 // MIDI Device State
 export type MIDIDeviceState = "disconnected" | "connected"

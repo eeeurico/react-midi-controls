@@ -1,5 +1,5 @@
 import React from "react"
-import { useMidiDevices } from "../hooks/useMidiDevices"
+import { useMidiContext } from "../contexts/MidiContext"
 import "./DeviceSelector.css"
 
 export const DeviceSelector: React.FC = () => {
@@ -12,7 +12,7 @@ export const DeviceSelector: React.FC = () => {
     selectDeviceById,
     disconnect,
     refreshDevices,
-  } = useMidiDevices()
+  } = useMidiContext()
 
   const handleDeviceSelect = (deviceId: string) => {
     if (selectedDevice?.id === deviceId) {

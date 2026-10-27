@@ -6,6 +6,7 @@ import type { SliderConfig } from "./types"
 // Hook for MIDI sliders (absolute control)
 export const useSlider = ({
   ccNumber,
+  channel,
   range = [0, 127],
   defaultValue = 0,
   min = 0,
@@ -18,10 +19,11 @@ export const useSlider = ({
   const mappedValue = mapRange(rawValue, min, max, range[0], range[1])
 
   const handleMIDIMessage = useCallback(
-    (event: any) => {
+    (event: MIDIMessageEvent) => {
       const message = parseMIDIMessage(event.data)
       if (!message || message.type !== "controller") return
       if (message.controller !== ccNumber) return
+      if (channel !== undefined && message.channel !== channel) return
 
       const timestamp = performance.now()
       lastMessageTime.current = timestamp
@@ -30,7 +32,7 @@ export const useSlider = ({
         setRawValue(message.value)
       }
     },
-    [ccNumber]
+    [ccNumber, channel]
   )
 
   // Automatically register/unregister with MIDI context

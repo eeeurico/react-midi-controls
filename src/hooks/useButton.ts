@@ -6,21 +6,23 @@ import type { ButtonConfig } from "./types"
 // Hook for MIDI buttons/pads (on/off control)
 export const useButton = ({
   ccNumber,
+  channel,
   defaultValue = false,
 }: ButtonConfig): boolean => {
   const [value, setValue] = useState(defaultValue)
   const { addMessageHandler } = useMidiContext()
 
   const handleMIDIMessage = useCallback(
-    (event: any) => {
+    (event: MIDIMessageEvent) => {
       const message = parseMIDIMessage(event.data)
       if (!message || message.type !== "controller") return
       if (message.controller !== ccNumber) return
+      if (channel !== undefined && message.channel !== channel) return
       if (message.value === undefined) return
 
       setValue(message.value > 0)
     },
-    [ccNumber]
+    [ccNumber, channel]
   )
 
   // Automatically register/unregister with MIDI context

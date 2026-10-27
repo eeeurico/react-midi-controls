@@ -1,25 +1,25 @@
 import React from "react"
 import { useSlider } from "../hooks/useSlider"
+import type { SliderComponentProps } from "../hooks/types"
 import "./MidiControls.css"
-
-interface SliderComponentProps {
-  ccNumber: number
-  label: string
-  defaultValue?: number
-  range?: [number, number]
-  min?: number
-  max?: number
-}
 
 export const SliderComponent: React.FC<SliderComponentProps> = ({
   ccNumber,
+  channel,
   label,
   range = [0, 100],
   defaultValue = 0,
   min = 0,
   max = 127,
 }) => {
-  const sliderValue = useSlider({ ccNumber, range, defaultValue, min, max })
+  const sliderValue = useSlider({
+    ccNumber,
+    channel,
+    range,
+    defaultValue,
+    min,
+    max,
+  })
 
   return (
     <div className="midi-slider">

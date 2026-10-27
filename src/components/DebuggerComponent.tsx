@@ -31,6 +31,10 @@ export const DebuggerComponent: React.FC<DebuggerComponentProps> = ({
             </span>
             <span className="type-display">{formatMIDIMessage(message)}</span>
 
+            {message.channel !== undefined && (
+              <span className="channel">Ch {message.channel}</span>
+            )}
+
             {/* Value display */}
             {message.value !== undefined && (
               <span className="value">Value: {message.value}</span>

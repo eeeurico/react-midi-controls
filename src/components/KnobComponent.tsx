@@ -1,25 +1,25 @@
 import React from "react"
 import { useSlider } from "../hooks/useSlider"
+import type { KnobComponentProps } from "../hooks/types"
 import "./MidiControls.css"
-
-interface KnobComponentProps {
-  ccNumber: number
-  defaultValue?: number
-  label: string
-  range?: [number, number]
-  min?: number
-  max?: number
-}
 
 export const KnobComponent: React.FC<KnobComponentProps> = ({
   ccNumber,
+  channel,
   label,
   range = [0, 100],
   defaultValue = 0,
   min = 0,
   max = 127,
 }) => {
-  const knobValue = useSlider({ ccNumber, range, min, max, defaultValue })
+  const knobValue = useSlider({
+    ccNumber,
+    channel,
+    range,
+    min,
+    max,
+    defaultValue,
+  })
 
   const rotation = ((knobValue - range[0]) / (range[1] - range[0])) * 270 - 135
 

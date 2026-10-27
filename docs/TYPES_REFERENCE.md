@@ -11,6 +11,7 @@ Configuration for slider/knob controls.
 ```typescript
 interface SliderConfig {
   ccNumber: number
+  channel?: number // 1-16; listens on all channels when omitted
   range?: [number, number]
   defaultValue?: number
   min?: number
@@ -25,6 +26,7 @@ Configuration for button/pad controls.
 ```typescript
 interface ButtonConfig {
   ccNumber: number
+  channel?: number // 1-16; listens on all channels when omitted
   defaultValue?: boolean
 }
 ```
@@ -48,9 +50,9 @@ Represents a parsed MIDI message.
 ```typescript
 interface MIDIMessage {
   id: number
-  timestamp: number
-  type: string
-  channel: number
+  timestamp: number // Date.now() when parsed
+  type: MIDIMessageType
+  channel?: number // 1-16; absent on system messages
   controller?: number
   value?: number
   note?: number
@@ -115,6 +117,7 @@ Props for `SliderComponent`.
 ```typescript
 interface SliderComponentProps {
   ccNumber: number
+  channel?: number
   label: string
   defaultValue?: number
   range?: [number, number]
@@ -130,6 +133,7 @@ Props for `KnobComponent`.
 ```typescript
 interface KnobComponentProps {
   ccNumber: number
+  channel?: number
   defaultValue?: number
   label: string
   range?: [number, number]
@@ -145,6 +149,7 @@ Props for `ButtonComponent`.
 ```typescript
 interface ButtonComponentProps {
   ccNumber: number
+  channel?: number
   label: string
   defaultValue?: boolean
 }
@@ -223,7 +228,7 @@ type Range = [number, number]
 
 ```typescript
 type CCNumber = number // MIDI CC Number (0-127)
-type MIDIChannel = number // MIDI Channel (0-15)
+type MIDIChannel = number // MIDI Channel (1-16)
 type MIDIValue = number // MIDI Value (0-127)
 type MIDINote = number // MIDI Note (0-127)
 type MIDIVelocity = number // MIDI Velocity (0-127)
@@ -233,23 +238,25 @@ type MIDIVelocity = number // MIDI Velocity (0-127)
 
 ```typescript
 type MIDIMessageType =
-  | "noteoff"
-  | "noteon"
-  | "controlchange"
-  | "pitchbend"
-  | "programchange"
-  | "aftertouch"
+  | "note_off"
+  | "note_on"
+  | "poly_aftertouch"
+  | "controller"
+  | "program_change"
+  | "channel_aftertouch"
+  | "pitch_bend"
   | "sysex"
   | "timecode"
-  | "songposition"
-  | "songselect"
-  | "tunerequest"
-  | "timingclock"
+  | "song_position"
+  | "song_select"
+  | "tune_request"
+  | "timing_clock"
   | "start"
   | "continue"
   | "stop"
-  | "activesensing"
+  | "active_sensing"
   | "reset"
+  | "unknown"
 ```
 
 ### MIDI Device States

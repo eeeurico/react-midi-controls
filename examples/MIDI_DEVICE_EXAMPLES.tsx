@@ -1,5 +1,5 @@
 import React from "react"
-import { useMidiDevices } from "react-midi-controls"
+import { useMidiDevices, type MIDIDevice } from "react-midi-controls"
 
 // Example 1: Simple dropdown selector
 export const SimpleDeviceSelector: React.FC = () => {
@@ -130,7 +130,7 @@ export const AdvancedDeviceManager: React.FC = () => {
     refreshDevices,
   } = useMidiDevices(true) // Auto-select first device
 
-  const connectToDevice = (device: any) => {
+  const connectToDevice = (device: MIDIDevice) => {
     if (selectedDevice?.id === device.id) {
       disconnect()
     } else {

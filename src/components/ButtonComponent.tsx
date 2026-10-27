@@ -1,19 +1,15 @@
 import React from "react"
 import { useButton } from "../hooks/useButton"
+import type { ButtonComponentProps } from "../hooks/types"
 import "./MidiControls.css"
-
-interface ButtonComponentProps {
-  ccNumber: number
-  label: string
-  defaultValue?: boolean
-}
 
 export const ButtonComponent: React.FC<ButtonComponentProps> = ({
   ccNumber,
+  channel,
   label,
   defaultValue = false,
 }) => {
-  const isPressed = useButton({ ccNumber, defaultValue })
+  const isPressed = useButton({ ccNumber, channel, defaultValue })
 
   return (
     <div className={`midi-button ${isPressed ? "pressed" : ""}`}>

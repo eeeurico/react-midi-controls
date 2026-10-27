@@ -9,7 +9,7 @@ React hooks and components for MIDI controllers. Build responsive, interactive i
 - **Pre-built Components**: Ready-to-use MIDI-responsive UI components
 - **TypeScript Support**: Full type safety and IntelliSense
 - **Context-based**: Efficient MIDI message handling across components
-- **CC-Only Focus**: Simplified for Control Change messages only
+- **CC-Focused Controls**: Sliders, knobs and buttons respond to Control Change messages, optionally filtered by channel
 - **Real-time Debugging**: Built-in MIDI message inspector
 
 ## Quick Start
@@ -23,10 +23,13 @@ npm install react-midi-controls
 ```jsx
 import {
   MidiProvider,
+  DeviceSelector,
+  MidiControlPanel,
   SliderComponent,
   KnobComponent,
   ButtonComponent,
 } from "react-midi-controls"
+import "react-midi-controls/style.css" // Styles for the pre-built components
 
 function App() {
   return (
@@ -45,7 +48,7 @@ function App() {
 
 ## Hooks
 
-### `useSlider({ ccNumber, range, defaultValue })`
+### `useSlider({ ccNumber, channel, range, defaultValue })`
 
 Creates an absolute MIDI control that returns the mapped value directly.
 
@@ -56,11 +59,12 @@ const cutoff = useSlider({
   range: [20, 20000],
   defaultValue: 1000,
 })
+const pan = useSlider({ ccNumber: 10, channel: 2 }) // Only listen on MIDI channel 2
 
 // Returns: number (the mapped value)
 ```
 
-### `useButton({ ccNumber, defaultValue })`
+### `useButton({ ccNumber, channel, defaultValue })`
 
 Creates a button/pad control that returns a boolean value directly.
 
@@ -71,16 +75,14 @@ const mute = useButton({ ccNumber: 65, defaultValue: true })
 // Returns: boolean (true when pressed, false when released)
 ```
 
-### `useDebugger(filter)`
+### `useDebugger({ maxMessages })`
 
-Debug MIDI messages with optional filtering.
+Collects incoming MIDI messages, newest first. Timing clock and active sensing messages are skipped.
 
 ```jsx
-const debugger = useDebugger({
-  type: 'controller'
-})
+const midiDebugger = useDebugger({ maxMessages: 50 })
 
-// Returns: { messages, isRecording, clear, startRecording, stopRecording }
+// Returns: { messages, clear }
 ```
 
 ## Components
@@ -92,6 +94,7 @@ A visual slider that responds to MIDI CC messages.
 ```jsx
 <SliderComponent
   ccNumber={1} // MIDI CC number
+  channel={1} // Optional: MIDI channel 1-16 (default: any)
   label="Modulation" // Display label
   range={[0, 100]} // Output range
 />
@@ -118,11 +121,7 @@ A button that lights up when pressed.
 Real-time MIDI message inspector.
 
 ```jsx
-<DebuggerComponent
-  filter={{
-    type: "controller",
-  }}
-/>
+<DebuggerComponent maxMessages={50} />
 ```
 
 ## Advanced Usage
@@ -130,7 +129,7 @@ Real-time MIDI message inspector.
 ### Custom Hook Implementation
 
 ```jsx
-import { useMidiContext } from "react-midi-controls"
+import { useMidiContext, parseMIDIMessage } from "react-midi-controls"
 import { useEffect, useState } from "react"
 
 function useCustomMidiControl(ccNumber) {
@@ -140,7 +139,7 @@ function useCustomMidiControl(ccNumber) {
   useEffect(() => {
     const handleMessage = (event) => {
       const message = parseMIDIMessage(event.data)
-      if (message.type === "controller" && message.ccNumber === ccNumber) {
+      if (message?.type === "controller" && message.controller === ccNumber) {
         setValue(message.value)
       }
     }
@@ -168,6 +167,10 @@ Map MIDI values (0-127) to any range:
 // Percentage (0% to 100%)
 <SliderComponent range={[0, 100]} />
 ```
+
+### Message Types
+
+`parseMIDIMessage` returns a `MIDIMessage` whose `type` is one of `note_on`, `note_off`, `poly_aftertouch`, `controller`, `program_change`, `channel_aftertouch`, `pitch_bend` (14-bit `value`, 8192 is center), or a system message (`sysex`, `timing_clock`, `start`, `stop`, ...). Channel messages include `channel` (1-16).
 
 ## Browser Support
 

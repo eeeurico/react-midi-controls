@@ -3,11 +3,41 @@ import type { MIDIDevice } from "./types"
 
 // Main MIDI context hook
 export const useMidi = () => {
-  const [midiAccess, setMidiAccess] = useState<any>(null)
+  const [midiAccess, setMidiAccess] = useState<MIDIAccess | null>(null)
   const [devices, setDevices] = useState<MIDIDevice[]>([])
-  const [selectedDevice, setSelectedDevice] = useState<any>(null)
+  const [selectedDevice, setSelectedDevice] = useState<MIDIInput | null>(null)
   const [isConnected, setIsConnected] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const updateDevices = useCallback((access: MIDIAccess) => {
+    const deviceList: MIDIDevice[] = []
+
+    // Add input devices
+    access.inputs.forEach((input) => {
+      deviceList.push({
+        id: input.id,
+        name: input.name || "Unknown Device",
+        manufacturer: input.manufacturer || undefined,
+        type: "input",
+        state: input.state,
+        connection: input.connection,
+      })
+    })
+
+    // Add output devices
+    access.outputs.forEach((output) => {
+      deviceList.push({
+        id: output.id,
+        name: output.name || "Unknown Device",
+        manufacturer: output.manufacturer || undefined,
+        type: "output",
+        state: output.state,
+        connection: output.connection,
+      })
+    })
+
+    setDevices(deviceList)
+  }, [])
 
   // Initialize MIDI access
   useEffect(() => {
@@ -28,37 +58,7 @@ export const useMidi = () => {
       .catch((err) => {
         setError(`Failed to access MIDI devices: ${err.message}`)
       })
-  }, [])
-
-  const updateDevices = useCallback((access: any) => {
-    const deviceList: MIDIDevice[] = []
-
-    // Add input devices
-    access.inputs.forEach((input: any) => {
-      deviceList.push({
-        id: input.id,
-        name: input.name || "Unknown Device",
-        manufacturer: input.manufacturer || undefined,
-        type: "input",
-        state: input.state,
-        connection: input.connection,
-      })
-    })
-
-    // Add output devices
-    access.outputs.forEach((output: any) => {
-      deviceList.push({
-        id: output.id,
-        name: output.name || "Unknown Device",
-        manufacturer: output.manufacturer || undefined,
-        type: "output",
-        state: output.state,
-        connection: output.connection,
-      })
-    })
-
-    setDevices(deviceList)
-  }, [])
+  }, [updateDevices])
 
   const connectToDevice = useCallback(
     (deviceId: string) => {

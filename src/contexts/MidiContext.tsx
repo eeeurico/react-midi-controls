@@ -5,31 +5,23 @@ import React, {
   useRef,
   useEffect,
 } from "react"
-import type { ReactNode } from "react"
-import {
-  useMidiDevices,
-  type UseMidiDevicesResult,
-} from "../hooks/useMidiDevices"
-
-interface MidiContextType extends UseMidiDevicesResult {
-  addMessageHandler: (handler: (event: any) => void) => () => void
-}
+import { useMidiDevices } from "../hooks/useMidiDevices"
+import type {
+  MidiContextType,
+  MidiProviderProps,
+  MIDIMessageHandler,
+} from "../hooks/types"
 
 const MidiContext = createContext<MidiContextType | null>(null)
-
-interface MidiProviderProps {
-  children: ReactNode
-  autoSelectFirstDevice?: boolean
-}
 
 export const MidiProvider: React.FC<MidiProviderProps> = ({
   children,
   autoSelectFirstDevice = true,
 }) => {
   const midiDevices = useMidiDevices(autoSelectFirstDevice)
-  const handlersRef = useRef<Set<(event: any) => void>>(new Set())
+  const handlersRef = useRef<Set<MIDIMessageHandler>>(new Set())
 
-  const addMessageHandler = useCallback((handler: (event: any) => void) => {
+  const addMessageHandler = useCallback((handler: MIDIMessageHandler) => {
     handlersRef.current.add(handler)
 
     // Return cleanup function
@@ -38,28 +30,25 @@ export const MidiProvider: React.FC<MidiProviderProps> = ({
     }
   }, [])
 
-  // Update the main handler when device changes
+  // Update the main handler when the selected input changes
+  const input = midiDevices.selectedDevice?.input
   useEffect(() => {
-    if (midiDevices.selectedDevice?.input && midiDevices.isConnected) {
-      const handleMessage = (event: any) => {
-        handlersRef.current.forEach((handler) => {
-          try {
-            handler(event)
-          } catch (error) {
-            console.error("Error in MIDI message handler:", error)
-          }
-        })
-      }
+    if (!input) return
 
-      midiDevices.selectedDevice.input.onmidimessage = handleMessage
-
-      return () => {
-        if (midiDevices.selectedDevice?.input) {
-          midiDevices.selectedDevice.input.onmidimessage = null
+    input.onmidimessage = (event) => {
+      handlersRef.current.forEach((handler) => {
+        try {
+          handler(event)
+        } catch (error) {
+          console.error("Error in MIDI message handler:", error)
         }
-      }
+      })
     }
-  }, [midiDevices.selectedDevice, midiDevices.isConnected])
+
+    return () => {
+      input.onmidimessage = null
+    }
+  }, [input])
 
   const contextValue: MidiContextType = {
     ...midiDevices,
