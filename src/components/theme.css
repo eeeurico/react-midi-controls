@@ -1,27 +1,31 @@
-/* Theme variables for the default styles. Override any of them on :root or on
-   a wrapper element; :where() gives these zero specificity, so yours win. */
+/* Theme variables for the default styles: a flat, dark, DAW-style look.
+   Override any of them on :root or on a wrapper element; :where() gives
+   these zero specificity, so yours win. */
 
 :where(:root) {
-  --rmc-accent: #0084ff;
-  --rmc-on-accent: #fff; /* Text on accent-colored backgrounds and badges */
-  --rmc-success: #28a745;
-  --rmc-warning: #ffc107;
-  --rmc-danger: #dc3545;
-  --rmc-secondary: #6f42c1;
+  --rmc-accent: #ff9a2e;
+  --rmc-on-accent: #1b1b1b; /* Text on accent-colored backgrounds */
+  --rmc-success: #8ad15f;
+  --rmc-warning: #f5d547;
+  --rmc-danger: #ff6b5e;
+  --rmc-secondary: #6cc4e0;
 
-  --rmc-surface: #fff;
-  --rmc-surface-muted: #f8f9fa;
-  --rmc-track: #ddd;
-  --rmc-border: #dee2e6;
-  --rmc-text: #333;
-  --rmc-text-muted: #6c757d;
+  --rmc-surface: #2f2f2f;
+  --rmc-surface-muted: #262626; /* Recessed areas: value boxes, headers, pads */
+  --rmc-track: #4b4b4b; /* Unfilled knob arcs and unlit pads */
+  --rmc-border: #1b1b1b; /* Hairlines and the seams between panel cells */
+  --rmc-text: #d9d9d9;
+  --rmc-text-muted: #8c8c8c;
 
-  --rmc-radius: 8px;
-  --rmc-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --rmc-font: inherit;
-  --rmc-mono-font: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  --rmc-radius: 3px;
+  --rmc-shadow: none;
+  --rmc-font:
+    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+  --rmc-mono-font: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-  --rmc-knob-size: 60px;
-  --rmc-knob-sweep: 270deg; /* Total rotation from minimum to maximum */
-  --rmc-button-size: 60px;
+  --rmc-knob-size: 44px;
+  --rmc-knob-sweep: 300deg; /* Total rotation from minimum to maximum */
+  --rmc-knob-arc: 3px; /* Thickness of the value arc */
+  --rmc-button-size: 44px;
 }

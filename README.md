@@ -153,7 +153,7 @@ function useCustomMidiControl(ccNumber) {
 
 ## Styling
 
-The components render unstyled markup. Import the default theme to get the look from the demo:
+The components render unstyled markup. Import the default theme for a flat, dark, DAW-style look: knobs with value arcs, slim slider bars, pads that light up, and a `MidiControlPanel` that lays controls out as a rack:
 
 ```js
 import "react-midi-controls/style.css"
@@ -165,32 +165,32 @@ The default theme is driven by CSS variables. Override them on `:root` or on any
 
 ```css
 :root {
-  --rmc-accent: #ff5a1f;
-  --rmc-knob-size: 80px;
-  --rmc-knob-sweep: 300deg;
+  --rmc-accent: #3fa9f5;
+  --rmc-knob-size: 56px;
 }
 
-.dark-panel {
-  --rmc-surface: #1e1e1e;
-  --rmc-surface-muted: #2a2a2a;
-  --rmc-text: #eee;
-  --rmc-track: #444;
-  --rmc-border: #333;
+.light-panel {
+  --rmc-surface: #c6c6c6;
+  --rmc-surface-muted: #b4b4b4;
+  --rmc-track: #959595;
+  --rmc-border: #8a8a8a;
+  --rmc-text: #1d1d1d;
+  --rmc-text-muted: #4a4a4a;
 }
 ```
 
 | Variable | Default | Used for |
 | --- | --- | --- |
-| `--rmc-accent` | `#0084ff` | Slider fill and thumb, knob indicator, pressed pads, values |
-| `--rmc-on-accent` | `#fff` | Text on colored backgrounds |
+| `--rmc-accent` | `#ff9a2e` | Knob arcs, slider fill, lit pads, selected device |
+| `--rmc-on-accent` | `#1b1b1b` | Text on accent-colored backgrounds |
 | `--rmc-success` / `--rmc-warning` / `--rmc-danger` / `--rmc-secondary` | | Status colors and debugger badges |
-| `--rmc-surface` / `--rmc-surface-muted` | `#fff` / `#f8f9fa` | Card and secondary backgrounds |
-| `--rmc-track` / `--rmc-border` | `#ddd` / `#dee2e6` | Slider track, outlines |
-| `--rmc-text` / `--rmc-text-muted` | `#333` / `#6c757d` | Text |
-| `--rmc-radius` / `--rmc-shadow` | `8px` / soft shadow | Cards |
-| `--rmc-font` / `--rmc-mono-font` | `inherit` / monospace | Text, debugger log |
-| `--rmc-knob-size` / `--rmc-knob-sweep` | `60px` / `270deg` | Knob size and rotation range |
-| `--rmc-button-size` | `60px` | Button pad size |
+| `--rmc-surface` / `--rmc-surface-muted` | `#2f2f2f` / `#262626` | Panels; recessed value boxes, headers and pads |
+| `--rmc-track` / `--rmc-border` | `#4b4b4b` / `#1b1b1b` | Unfilled arcs, slider tracks and unlit pads; hairlines and panel seams |
+| `--rmc-text` / `--rmc-text-muted` | `#d9d9d9` / `#8c8c8c` | Values; labels |
+| `--rmc-radius` / `--rmc-shadow` | `3px` / `none` | Corners, optional shadow |
+| `--rmc-font` / `--rmc-mono-font` | system UI / monospace | Text, raw MIDI bytes |
+| `--rmc-knob-size` / `--rmc-knob-sweep` / `--rmc-knob-arc` | `44px` / `300deg` / `3px` | Knob size, rotation range, arc thickness |
+| `--rmc-button-size` | `44px` | Pad size |
 
 ### Class Names and State
 
