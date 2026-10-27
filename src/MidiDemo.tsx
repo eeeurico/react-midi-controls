@@ -41,6 +41,32 @@ const MidiDemo: React.FC = () => {
         </div>
 
         <div className="demo-section">
+          <h2>Theming</h2>
+          <p>
+            The same controls, restyled by overriding CSS variables on a
+            wrapper element.
+          </p>
+
+          <div className="controls-grid themed-controls">
+            <SliderComponent
+              ccNumber={40}
+              label="Volume"
+              range={[0, 100]}
+              defaultValue={90}
+            />
+
+            <KnobComponent
+              ccNumber={30}
+              label="Filter Cutoff"
+              range={[0, 100]}
+              defaultValue={90}
+            />
+
+            <ButtonComponent ccNumber={20} label="Sustain Pedal" />
+          </div>
+        </div>
+
+        <div className="demo-section">
           <h2>Code Examples</h2>
           <div className="code-examples">
             <div className="example">

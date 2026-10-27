@@ -1,350 +1,287 @@
-/* MIDI Controls Styles */
+/* MIDI Controls Styles
+   Sliders and knobs set --rmc-value (0-1) on their root; fills, thumbs and
+   dials are positioned from it. Theme variables live in theme.css. */
 
-.midi-control-panel {
-  min-height: 400px;
-}
-
-.controls-grid {
+.rmc-panel__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
   align-items: start;
 }
 
-/* Slider Styles */
-.midi-slider {
-  background: white;
+/* Shared card look */
+.rmc-slider,
+.rmc-knob,
+.rmc-button,
+.rmc-debugger {
+  background: var(--rmc-surface);
+  border-radius: var(--rmc-radius);
+  box-shadow: var(--rmc-shadow);
+  color: var(--rmc-text);
+  font-family: var(--rmc-font);
+}
+
+.rmc-slider,
+.rmc-knob,
+.rmc-button {
   padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
-.midi-slider.active {
-  box-shadow: 0 4px 12px rgba(0, 132, 255, 0.3);
-  transform: translateY(-2px);
-}
-
-.midi-slider label {
+.rmc-slider__label,
+.rmc-knob__label,
+.rmc-button__label {
   display: block;
   font-weight: 600;
-  margin-bottom: 10px;
-  color: #333;
   font-size: 14px;
 }
 
-.slider-container {
-  width: 100%;
+.rmc-slider__value,
+.rmc-knob__value {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--rmc-accent);
 }
 
-.slider-track {
-  height: 6px;
-  border-radius: 3px;
-  position: relative;
-  cursor: pointer;
+/* Slider */
+.rmc-slider__label {
   margin-bottom: 10px;
 }
 
-.slider-thumb {
+.rmc-slider__track {
+  position: relative;
+  height: 6px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  background: var(--rmc-track);
+}
+
+.rmc-slider__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--rmc-value, 0) * 100%);
+  border-radius: inherit;
+  background: var(--rmc-accent);
+}
+
+.rmc-slider__thumb {
   position: absolute;
   top: -4px;
+  left: calc(var(--rmc-value, 0) * 100%);
   width: 14px;
   height: 14px;
-  background: #0084ff;
   border-radius: 50%;
-  transform: translateX(-50%);
+  background: var(--rmc-accent);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translateX(-50%);
 }
 
-.slider-value {
+.rmc-slider__value {
   text-align: center;
-  font-weight: 600;
-  color: #0084ff;
-  font-size: 16px;
 }
 
-.raw-value {
-  font-size: 12px;
-  color: #666;
-  font-weight: normal;
-}
-
-/* Knob Styles */
-.midi-knob {
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  transition: all 0.2s ease;
-}
-
-.midi-knob.active {
-  box-shadow: 0 4px 12px rgba(0, 132, 255, 0.3);
-  transform: translateY(-2px);
-}
-
-.midi-knob label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: #333;
-  font-size: 14px;
-}
-
-.knob-container {
+/* Knob: the dial turns through --rmc-knob-sweep, centered on 12 o'clock */
+.rmc-knob {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  text-align: center;
 }
 
-.knob-circle {
-  width: 60px;
-  height: 60px;
-  border: 3px solid #ddd;
-  border-radius: 50%;
+.rmc-knob__label {
+  margin-bottom: 5px;
+}
+
+.rmc-knob__dial {
   position: relative;
-  background: linear-gradient(145deg, #f0f0f0, #cacaca);
+  width: var(--rmc-knob-size);
+  height: var(--rmc-knob-size);
+  border: 3px solid var(--rmc-track);
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--rmc-surface-muted), var(--rmc-track));
+  transform: rotate(calc((var(--rmc-value, 0) - 0.5) * var(--rmc-knob-sweep)));
   transition: transform 0.1s ease;
 }
 
-.knob-indicator {
+.rmc-knob__indicator {
   position: absolute;
-  top: 5px;
+  top: 8%;
   left: 50%;
   width: 3px;
-  height: 20px;
-  background: #0084ff;
+  height: 33%;
   border-radius: 2px;
+  background: var(--rmc-accent);
   transform: translateX(-50%);
 }
 
-.knob-value {
-  font-weight: 600;
-  color: #0084ff;
+/* Button: data-pressed is set while the pad is held */
+.rmc-button {
+  text-align: center;
+}
+
+.rmc-button[data-pressed] {
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--rmc-accent) 30%, transparent);
+  transform: translateY(-2px);
+}
+
+.rmc-button__pad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--rmc-button-size);
+  height: var(--rmc-button-size);
+  margin: 0 auto 10px;
+  border: 2px solid var(--rmc-track);
+  border-radius: 50%;
+  background: var(--rmc-surface-muted);
+  transition: all 0.1s ease;
+}
+
+.rmc-button[data-pressed] .rmc-button__pad {
+  border-color: color-mix(in srgb, var(--rmc-accent), black 20%);
+  background: var(--rmc-accent);
+  transform: scale(0.95);
+}
+
+.rmc-button__inner {
+  width: 66%;
+  height: 66%;
+  border-radius: 50%;
+  background: var(--rmc-surface);
+  transition: background 0.1s ease;
+}
+
+.rmc-button[data-pressed] .rmc-button__inner {
+  background: color-mix(in srgb, var(--rmc-accent) 10%, var(--rmc-surface));
+}
+
+.rmc-button__label {
+  margin-bottom: 5px;
+}
+
+.rmc-button__value {
+  font-size: 12px;
+  color: var(--rmc-text-muted);
+}
+
+/* Debugger: each message carries data-type (controller, note_on, ...) */
+.rmc-debugger {
+  grid-column: 1 / -1; /* Full width inside the panel grid */
+  display: flex;
+  flex-direction: column;
+  max-height: 400px;
+  overflow: hidden;
+}
+
+.rmc-debugger__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid var(--rmc-border);
+  background: var(--rmc-surface-muted);
+}
+
+.rmc-debugger__title {
+  margin: 0;
   font-size: 16px;
 }
 
-.reset-button {
-  padding: 4px 8px;
-  background: #f0f0f0;
-  border: 1px solid #ddd;
+.rmc-debugger__clear {
+  padding: 6px 12px;
+  border: 1px solid var(--rmc-track);
   border-radius: 4px;
+  background: var(--rmc-surface);
+  color: var(--rmc-text);
   font-size: 12px;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
-.reset-button:hover {
-  background: #e0e0e0;
+.rmc-debugger__clear:hover {
+  background: var(--rmc-surface-muted);
 }
 
-/* Button Styles */
-.midi-button {
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  transition: all 0.2s ease;
-}
-
-.midi-button.pressed {
-  box-shadow: 0 4px 12px rgba(0, 132, 255, 0.3);
-  transform: translateY(-2px);
-}
-
-.button-circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: #f0f0f0;
-  border: 2px solid #ddd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 10px;
-  transition: all 0.1s ease;
-}
-
-.midi-button.pressed .button-circle {
-  background: #0084ff;
-  border-color: #0066cc;
-  transform: scale(0.95);
-}
-
-.button-inner {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: white;
-  transition: all 0.1s ease;
-}
-
-.midi-button.pressed .button-inner {
-  background: #e6f3ff;
-}
-
-.midi-button label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 5px;
-  color: #333;
-  font-size: 14px;
-}
-
-.button-stats {
-  font-size: 12px;
-  color: #666;
-}
-
-/* Debugger Styles */
-.midi-debugger {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  grid-column: 1 / -1; /* Full width */
-  max-height: 400px;
-  display: flex;
-  flex-direction: column;
-}
-
-.debugger-header {
-  background: #f8f9fa;
-  padding: 15px;
-  border-bottom: 1px solid #dee2e6;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.debugger-header h3 {
-  margin: 0;
-  color: #333;
-  font-size: 16px;
-}
-
-.debugger-controls {
-  display: flex;
-  gap: 10px;
-}
-
-.debugger-controls button {
-  padding: 6px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
-  cursor: pointer;
-  font-size: 12px;
-  transition: all 0.2s ease;
-  color: #333;
-}
-
-.debugger-controls button:hover {
-  background: #f0f0f0;
-}
-
-.debugger-controls button.recording {
-  background: #dc3545;
-  color: white;
-  border-color: #dc3545;
-}
-
-.messages-container {
+.rmc-debugger__messages {
   flex: 1;
   overflow-y: auto;
   padding: 10px;
-  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-family: var(--rmc-mono-font);
   font-size: 12px;
   line-height: 1.4;
 }
 
-.message {
+.rmc-debugger__message {
   display: flex;
   gap: 8px;
   padding: 4px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--rmc-border);
 }
 
-.message:last-child {
+.rmc-debugger__message:last-child {
   border-bottom: none;
 }
 
-.message span {
+.rmc-debugger__message > span {
   padding: 2px 6px;
   border-radius: 3px;
   font-weight: 500;
 }
 
-.timestamp {
-  background: #e9ecef;
-  color: #6c757d;
+.rmc-debugger__timestamp {
+  background: var(--rmc-surface-muted);
+  color: var(--rmc-text-muted);
   font-size: 10px;
 }
 
-.type {
-  background: #007bff;
-  color: white;
+.rmc-debugger__type,
+.rmc-debugger__channel,
+.rmc-debugger__value,
+.rmc-debugger__velocity {
+  min-width: 30px;
+  text-align: center;
+  color: var(--rmc-on-accent);
+}
+
+.rmc-debugger__type {
   min-width: 40px;
-  text-align: center;
+  background: var(--rmc-accent);
 }
 
-.message-controller .type {
-  background: #28a745;
+.rmc-debugger__message[data-type="controller"] .rmc-debugger__type {
+  background: var(--rmc-success);
 }
 
-.message-note-on .type {
-  background: #ffc107;
-  color: #212529;
+.rmc-debugger__message[data-type="note_on"] .rmc-debugger__type {
+  background: var(--rmc-warning);
+  color: var(--rmc-text);
 }
 
-.message-note-off .type {
-  background: #6c757d;
-  color: white;
+.rmc-debugger__message[data-type="note_off"] .rmc-debugger__type {
+  background: var(--rmc-text-muted);
 }
 
-.message-pitch-bend .type {
-  background: #6f42c1;
-  color: white;
+.rmc-debugger__message[data-type="pitch_bend"] .rmc-debugger__type,
+.rmc-debugger__channel {
+  background: var(--rmc-secondary);
 }
 
-.channel {
-  background: #6f42c1;
-  color: white;
-  min-width: 30px;
-  text-align: center;
+.rmc-debugger__value,
+.rmc-debugger__velocity {
+  background: var(--rmc-danger);
 }
 
-.controller {
-  background: #17a2b8;
-  color: white;
-}
-
-.note {
-  background: #fd7e14;
-  color: white;
-}
-
-.pitch-bend {
-  background: #6f42c1;
-  color: white;
-  min-width: 30px;
-  text-align: center;
-}
-
-.value,
-.velocity {
-  background: #dc3545;
-  color: white;
-  min-width: 30px;
-  text-align: center;
+.rmc-debugger__raw,
+.rmc-debugger__empty {
+  color: var(--rmc-text-muted);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .controls-grid {
+  .rmc-panel__grid {
     grid-template-columns: 1fr;
   }
 }

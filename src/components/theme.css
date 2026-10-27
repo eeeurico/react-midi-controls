@@ -1,0 +1,27 @@
+/* Theme variables for the default styles. Override any of them on :root or on
+   a wrapper element; :where() gives these zero specificity, so yours win. */
+
+:where(:root) {
+  --rmc-accent: #0084ff;
+  --rmc-on-accent: #fff; /* Text on accent-colored backgrounds and badges */
+  --rmc-success: #28a745;
+  --rmc-warning: #ffc107;
+  --rmc-danger: #dc3545;
+  --rmc-secondary: #6f42c1;
+
+  --rmc-surface: #fff;
+  --rmc-surface-muted: #f8f9fa;
+  --rmc-track: #ddd;
+  --rmc-border: #dee2e6;
+  --rmc-text: #333;
+  --rmc-text-muted: #6c757d;
+
+  --rmc-radius: 8px;
+  --rmc-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --rmc-font: inherit;
+  --rmc-mono-font: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+
+  --rmc-knob-size: 60px;
+  --rmc-knob-sweep: 270deg; /* Total rotation from minimum to maximum */
+  --rmc-button-size: 60px;
+}

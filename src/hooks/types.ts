@@ -1,4 +1,4 @@
-import type { ReactNode } from "react"
+import type { CSSProperties, ReactNode } from "react"
 
 // Configuration interfaces
 export interface SliderConfig {
@@ -90,8 +90,41 @@ export interface PitchBendHookResult {
   isActive: boolean
 }
 
+// Styling props shared by the components: className and style go on the
+// root element, classNames adds classes to individual parts
+export interface StylingProps<Part extends string> {
+  className?: string
+  style?: CSSProperties
+  classNames?: Partial<Record<Part, string>>
+}
+
+export type SliderPart = "root" | "label" | "track" | "fill" | "thumb" | "value"
+export type KnobPart = "root" | "label" | "dial" | "indicator" | "value"
+export type ButtonPart = "root" | "pad" | "inner" | "label" | "value"
+export type DebuggerPart =
+  | "root"
+  | "header"
+  | "title"
+  | "clearButton"
+  | "messages"
+  | "message"
+  | "empty"
+export type DeviceSelectorPart =
+  | "root"
+  | "title"
+  | "list"
+  | "device"
+  | "deviceName"
+  | "deviceManufacturer"
+  | "deviceStatus"
+  | "status"
+  | "action"
+  | "empty"
+  | "error"
+export type MidiControlPanelPart = "root" | "grid"
+
 // Component Props interfaces
-export interface SliderComponentProps {
+export interface SliderComponentProps extends StylingProps<SliderPart> {
   ccNumber: number
   channel?: number
   label: string
@@ -101,7 +134,7 @@ export interface SliderComponentProps {
   max?: number
 }
 
-export interface KnobComponentProps {
+export interface KnobComponentProps extends StylingProps<KnobPart> {
   ccNumber: number
   channel?: number
   defaultValue?: number
@@ -111,18 +144,21 @@ export interface KnobComponentProps {
   max?: number
 }
 
-export interface ButtonComponentProps {
+export interface ButtonComponentProps extends StylingProps<ButtonPart> {
   ccNumber: number
   channel?: number
   label: string
   defaultValue?: boolean
 }
 
-export interface DebuggerComponentProps {
+export interface DebuggerComponentProps extends StylingProps<DebuggerPart> {
   maxMessages?: number
 }
 
-export interface MidiControlPanelProps {
+export type DeviceSelectorProps = StylingProps<DeviceSelectorPart>
+
+export interface MidiControlPanelProps
+  extends StylingProps<MidiControlPanelPart> {
   children: ReactNode
 }
 

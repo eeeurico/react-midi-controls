@@ -1,6 +1,8 @@
 import React from "react"
 import { useSlider } from "../hooks/useSlider"
+import { cx, valueStyle } from "../utils/styling"
 import type { SliderComponentProps } from "../hooks/types"
+import "./theme.css"
 import "./MidiControls.css"
 
 export const SliderComponent: React.FC<SliderComponentProps> = ({
@@ -11,6 +13,9 @@ export const SliderComponent: React.FC<SliderComponentProps> = ({
   defaultValue = 0,
   min = 0,
   max = 127,
+  className,
+  style,
+  classNames,
 }) => {
   const sliderValue = useSlider({
     ccNumber,
@@ -22,31 +27,19 @@ export const SliderComponent: React.FC<SliderComponentProps> = ({
   })
 
   return (
-    <div className="midi-slider">
-      <label>
+    <div
+      className={cx("rmc-slider", className, classNames?.root)}
+      style={valueStyle(sliderValue, range, style)}
+    >
+      <label className={cx("rmc-slider__label", classNames?.label)}>
         {label} (CC{ccNumber})
       </label>
-      <div className="slider-container">
-        <div
-          className="slider-track"
-          style={{
-            background: `linear-gradient(to right, #0084ff 0%, #0084ff ${
-              ((sliderValue - range[0]) / (range[1] - range[0])) * 100
-            }%, #ddd ${
-              ((sliderValue - range[0]) / (range[1] - range[0])) * 100
-            }%, #ddd 100%)`,
-          }}
-        >
-          <div
-            className="slider-thumb"
-            style={{
-              left: `${
-                ((sliderValue - range[0]) / (range[1] - range[0])) * 100
-              }%`,
-            }}
-          />
-        </div>
-        <div className="slider-value">{sliderValue.toFixed(1)}</div>
+      <div className={cx("rmc-slider__track", classNames?.track)}>
+        <div className={cx("rmc-slider__fill", classNames?.fill)} />
+        <div className={cx("rmc-slider__thumb", classNames?.thumb)} />
+      </div>
+      <div className={cx("rmc-slider__value", classNames?.value)}>
+        {sliderValue.toFixed(1)}
       </div>
     </div>
   )

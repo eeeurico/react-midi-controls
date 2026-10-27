@@ -29,7 +29,7 @@ import {
   KnobComponent,
   ButtonComponent,
 } from "react-midi-controls"
-import "react-midi-controls/style.css" // Styles for the pre-built components
+import "react-midi-controls/style.css" // Optional default theme, see Styling
 
 function App() {
   return (
@@ -149,6 +149,95 @@ function useCustomMidiControl(ccNumber) {
 
   return value
 }
+```
+
+## Styling
+
+The components render unstyled markup. Import the default theme to get the look from the demo:
+
+```js
+import "react-midi-controls/style.css"
+```
+
+### Theme Variables
+
+The default theme is driven by CSS variables. Override them on `:root` or on any wrapper element (the defaults have zero specificity, so yours always win):
+
+```css
+:root {
+  --rmc-accent: #ff5a1f;
+  --rmc-knob-size: 80px;
+  --rmc-knob-sweep: 300deg;
+}
+
+.dark-panel {
+  --rmc-surface: #1e1e1e;
+  --rmc-surface-muted: #2a2a2a;
+  --rmc-text: #eee;
+  --rmc-track: #444;
+  --rmc-border: #333;
+}
+```
+
+| Variable | Default | Used for |
+| --- | --- | --- |
+| `--rmc-accent` | `#0084ff` | Slider fill and thumb, knob indicator, pressed pads, values |
+| `--rmc-on-accent` | `#fff` | Text on colored backgrounds |
+| `--rmc-success` / `--rmc-warning` / `--rmc-danger` / `--rmc-secondary` | | Status colors and debugger badges |
+| `--rmc-surface` / `--rmc-surface-muted` | `#fff` / `#f8f9fa` | Card and secondary backgrounds |
+| `--rmc-track` / `--rmc-border` | `#ddd` / `#dee2e6` | Slider track, outlines |
+| `--rmc-text` / `--rmc-text-muted` | `#333` / `#6c757d` | Text |
+| `--rmc-radius` / `--rmc-shadow` | `8px` / soft shadow | Cards |
+| `--rmc-font` / `--rmc-mono-font` | `inherit` / monospace | Text, debugger log |
+| `--rmc-knob-size` / `--rmc-knob-sweep` | `60px` / `270deg` | Knob size and rotation range |
+| `--rmc-button-size` | `60px` | Button pad size |
+
+### Class Names and State
+
+Every element has an `rmc-` class (`rmc-knob`, `rmc-knob__dial`, `rmc-slider__fill`, ...), and state is exposed so CSS can react to it:
+
+- Slider and knob roots set `--rmc-value`: the value's position in its range, from 0 to 1. The default theme positions the fill, thumb and dial from it, so you can change them in CSS alone:
+
+  ```css
+  .rmc-knob__dial {
+    transform: rotate(calc(var(--rmc-value) * 360deg));
+  }
+  ```
+
+- Button roots have `data-pressed` while the pad is held.
+- Debugger messages have `data-type` (`controller`, `note_on`, ...).
+- `DeviceSelector` has `data-state` (`loading`, `error`, `ready`); its device buttons have `data-state` (`connected`, `disconnected`) and `data-selected`.
+
+### `className`, `style` and `classNames`
+
+`className` and `style` go on the root element. `classNames` adds classes to individual parts, which works well with Tailwind or CSS Modules:
+
+```jsx
+<KnobComponent
+  ccNumber={74}
+  label="Cutoff"
+  className="rounded-xl bg-zinc-900 p-4"
+  classNames={{ dial: "border-zinc-700", value: "text-orange-400" }}
+/>
+```
+
+| Component | Parts |
+| --- | --- |
+| `SliderComponent` | `root`, `label`, `track`, `fill`, `thumb`, `value` |
+| `KnobComponent` | `root`, `label`, `dial`, `indicator`, `value` |
+| `ButtonComponent` | `root`, `pad`, `inner`, `label`, `value` |
+| `DebuggerComponent` | `root`, `header`, `title`, `clearButton`, `messages`, `message`, `empty` |
+| `DeviceSelector` | `root`, `title`, `list`, `device`, `deviceName`, `deviceManufacturer`, `deviceStatus`, `status`, `action`, `empty`, `error` |
+| `MidiControlPanel` | `root`, `grid` |
+
+### Fully Custom UI
+
+For a completely different look, skip the components and use the hooks, which return plain values:
+
+```jsx
+const cutoff = useSlider({ ccNumber: 74, range: [0, 1] })
+
+return <MyKnob value={cutoff} />
 ```
 
 ## Configuration Options

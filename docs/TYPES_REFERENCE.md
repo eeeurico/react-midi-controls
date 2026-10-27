@@ -110,12 +110,51 @@ interface UseMidiDevicesResult {
 
 ## Component Props Types
 
+Every component accepts the styling props below on top of its own props.
+
+### `StylingProps<Part>`
+
+`className` and `style` go on the root element; `classNames` adds classes to individual parts.
+
+```typescript
+interface StylingProps<Part extends string> {
+  className?: string
+  style?: React.CSSProperties
+  classNames?: Partial<Record<Part, string>>
+}
+
+type SliderPart = "root" | "label" | "track" | "fill" | "thumb" | "value"
+type KnobPart = "root" | "label" | "dial" | "indicator" | "value"
+type ButtonPart = "root" | "pad" | "inner" | "label" | "value"
+type DebuggerPart =
+  | "root"
+  | "header"
+  | "title"
+  | "clearButton"
+  | "messages"
+  | "message"
+  | "empty"
+type DeviceSelectorPart =
+  | "root"
+  | "title"
+  | "list"
+  | "device"
+  | "deviceName"
+  | "deviceManufacturer"
+  | "deviceStatus"
+  | "status"
+  | "action"
+  | "empty"
+  | "error"
+type MidiControlPanelPart = "root" | "grid"
+```
+
 ### `SliderComponentProps`
 
 Props for `SliderComponent`.
 
 ```typescript
-interface SliderComponentProps {
+interface SliderComponentProps extends StylingProps<SliderPart> {
   ccNumber: number
   channel?: number
   label: string
@@ -131,7 +170,7 @@ interface SliderComponentProps {
 Props for `KnobComponent`.
 
 ```typescript
-interface KnobComponentProps {
+interface KnobComponentProps extends StylingProps<KnobPart> {
   ccNumber: number
   channel?: number
   defaultValue?: number
@@ -147,7 +186,7 @@ interface KnobComponentProps {
 Props for `ButtonComponent`.
 
 ```typescript
-interface ButtonComponentProps {
+interface ButtonComponentProps extends StylingProps<ButtonPart> {
   ccNumber: number
   channel?: number
   label: string
@@ -160,9 +199,17 @@ interface ButtonComponentProps {
 Props for `DebuggerComponent`.
 
 ```typescript
-interface DebuggerComponentProps {
+interface DebuggerComponentProps extends StylingProps<DebuggerPart> {
   maxMessages?: number
 }
+```
+
+### `DeviceSelectorProps`
+
+Props for `DeviceSelector`.
+
+```typescript
+type DeviceSelectorProps = StylingProps<DeviceSelectorPart>
 ```
 
 ### `MidiControlPanelProps`
@@ -170,7 +217,7 @@ interface DebuggerComponentProps {
 Props for `MidiControlPanel`.
 
 ```typescript
-interface MidiControlPanelProps {
+interface MidiControlPanelProps extends StylingProps<MidiControlPanelPart> {
   children: React.ReactNode
 }
 ```
