@@ -1,8 +1,9 @@
 import { useEffect, useCallback } from "react"
 import { useMidi } from "./useMidi"
+import type { MIDIMessageHandler } from "./types"
 
 interface MIDIControlHandler {
-  handleMIDIMessage: (event: any) => void
+  handleMIDIMessage: MIDIMessageHandler
 }
 
 // Hook to manage multiple MIDI controls with a single device connection
@@ -10,7 +11,7 @@ export const useMidiControlManager = (controls: MIDIControlHandler[]) => {
   const { selectedDevice, isConnected } = useMidi()
 
   const handleAllMessages = useCallback(
-    (event: any) => {
+    (event: MIDIMessageEvent) => {
       controls.forEach((control) => {
         control.handleMIDIMessage(event)
       })

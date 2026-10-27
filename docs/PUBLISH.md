@@ -57,14 +57,14 @@ npm view react-midi-controls
 ```
 react-midi-controls/
 ├── dist/
-│   ├── index.es.js      # ES module
-│   ├── index.cjs.js     # CommonJS module
+│   ├── index.js         # ES module
+│   ├── index.cjs        # CommonJS module
 │   ├── index.d.ts       # TypeScript declarations
 │   ├── hooks/           # Individual type declarations
 │   ├── components/      # Component type declarations
 │   ├── contexts/        # Context type declarations
 │   ├── utils/           # Utility type declarations
-│   ├── react-midi-controls.css      # Styles
+│   ├── style.css        # Styles (import "react-midi-controls/style.css")
 │   └── *.map            # Source maps
 ├── README.md            # Documentation
 ├── LICENSE              # MIT License

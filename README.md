@@ -9,7 +9,7 @@ React hooks and components for MIDI controllers. Build responsive, interactive i
 - **Pre-built Components**: Ready-to-use MIDI-responsive UI components
 - **TypeScript Support**: Full type safety and IntelliSense
 - **Context-based**: Efficient MIDI message handling across components
-- **CC-Only Focus**: Simplified for Control Change messages only
+- **CC-Focused Controls**: Sliders, knobs and buttons respond to Control Change messages, optionally filtered by channel
 - **Real-time Debugging**: Built-in MIDI message inspector
 
 ## Quick Start
@@ -23,10 +23,13 @@ npm install react-midi-controls
 ```jsx
 import {
   MidiProvider,
+  DeviceSelector,
+  MidiControlPanel,
   SliderComponent,
   KnobComponent,
   ButtonComponent,
 } from "react-midi-controls"
+import "react-midi-controls/style.css" // Optional default theme, see Styling
 
 function App() {
   return (
@@ -45,7 +48,7 @@ function App() {
 
 ## Hooks
 
-### `useSlider({ ccNumber, range, defaultValue })`
+### `useSlider({ ccNumber, channel, range, defaultValue })`
 
 Creates an absolute MIDI control that returns the mapped value directly.
 
@@ -56,11 +59,12 @@ const cutoff = useSlider({
   range: [20, 20000],
   defaultValue: 1000,
 })
+const pan = useSlider({ ccNumber: 10, channel: 2 }) // Only listen on MIDI channel 2
 
 // Returns: number (the mapped value)
 ```
 
-### `useButton({ ccNumber, defaultValue })`
+### `useButton({ ccNumber, channel, defaultValue })`
 
 Creates a button/pad control that returns a boolean value directly.
 
@@ -71,16 +75,14 @@ const mute = useButton({ ccNumber: 65, defaultValue: true })
 // Returns: boolean (true when pressed, false when released)
 ```
 
-### `useDebugger(filter)`
+### `useDebugger({ maxMessages })`
 
-Debug MIDI messages with optional filtering.
+Collects incoming MIDI messages, newest first. Timing clock and active sensing messages are skipped.
 
 ```jsx
-const debugger = useDebugger({
-  type: 'controller'
-})
+const midiDebugger = useDebugger({ maxMessages: 50 })
 
-// Returns: { messages, isRecording, clear, startRecording, stopRecording }
+// Returns: { messages, clear }
 ```
 
 ## Components
@@ -92,6 +94,7 @@ A visual slider that responds to MIDI CC messages.
 ```jsx
 <SliderComponent
   ccNumber={1} // MIDI CC number
+  channel={1} // Optional: MIDI channel 1-16 (default: any)
   label="Modulation" // Display label
   range={[0, 100]} // Output range
 />
@@ -118,11 +121,7 @@ A button that lights up when pressed.
 Real-time MIDI message inspector.
 
 ```jsx
-<DebuggerComponent
-  filter={{
-    type: "controller",
-  }}
-/>
+<DebuggerComponent maxMessages={50} />
 ```
 
 ## Advanced Usage
@@ -130,7 +129,7 @@ Real-time MIDI message inspector.
 ### Custom Hook Implementation
 
 ```jsx
-import { useMidiContext } from "react-midi-controls"
+import { useMidiContext, parseMIDIMessage } from "react-midi-controls"
 import { useEffect, useState } from "react"
 
 function useCustomMidiControl(ccNumber) {
@@ -140,7 +139,7 @@ function useCustomMidiControl(ccNumber) {
   useEffect(() => {
     const handleMessage = (event) => {
       const message = parseMIDIMessage(event.data)
-      if (message.type === "controller" && message.ccNumber === ccNumber) {
+      if (message?.type === "controller" && message.controller === ccNumber) {
         setValue(message.value)
       }
     }
@@ -150,6 +149,95 @@ function useCustomMidiControl(ccNumber) {
 
   return value
 }
+```
+
+## Styling
+
+The components render unstyled markup. Import the default theme for a flat, dark, DAW-style look: knobs with value arcs, slim slider bars, pads that light up, and a `MidiControlPanel` that lays controls out as a rack:
+
+```js
+import "react-midi-controls/style.css"
+```
+
+### Theme Variables
+
+The default theme is driven by CSS variables. Override them on `:root` or on any wrapper element (the defaults have zero specificity, so yours always win):
+
+```css
+:root {
+  --rmc-accent: #3fa9f5;
+  --rmc-knob-size: 56px;
+}
+
+.light-panel {
+  --rmc-surface: #c6c6c6;
+  --rmc-surface-muted: #b4b4b4;
+  --rmc-track: #959595;
+  --rmc-border: #8a8a8a;
+  --rmc-text: #1d1d1d;
+  --rmc-text-muted: #4a4a4a;
+}
+```
+
+| Variable | Default | Used for |
+| --- | --- | --- |
+| `--rmc-accent` | `#ff9a2e` | Knob arcs, slider fill, lit pads, selected device |
+| `--rmc-on-accent` | `#1b1b1b` | Text on accent-colored backgrounds |
+| `--rmc-success` / `--rmc-warning` / `--rmc-danger` / `--rmc-secondary` | | Status colors and debugger badges |
+| `--rmc-surface` / `--rmc-surface-muted` | `#2f2f2f` / `#262626` | Panels; recessed value boxes, headers and pads |
+| `--rmc-track` / `--rmc-border` | `#4b4b4b` / `#1b1b1b` | Unfilled arcs, slider tracks and unlit pads; hairlines and panel seams |
+| `--rmc-text` / `--rmc-text-muted` | `#d9d9d9` / `#8c8c8c` | Values; labels |
+| `--rmc-radius` / `--rmc-shadow` | `3px` / `none` | Corners, optional shadow |
+| `--rmc-font` / `--rmc-mono-font` | system UI / monospace | Text, raw MIDI bytes |
+| `--rmc-knob-size` / `--rmc-knob-sweep` / `--rmc-knob-arc` | `44px` / `300deg` / `3px` | Knob size, rotation range, arc thickness |
+| `--rmc-button-size` | `44px` | Pad size |
+
+### Class Names and State
+
+Every element has an `rmc-` class (`rmc-knob`, `rmc-knob__dial`, `rmc-slider__fill`, ...), and state is exposed so CSS can react to it:
+
+- Slider and knob roots set `--rmc-value`: the value's position in its range, from 0 to 1. The default theme positions the fill, thumb and dial from it, so you can change them in CSS alone:
+
+  ```css
+  .rmc-knob__dial {
+    transform: rotate(calc(var(--rmc-value) * 360deg));
+  }
+  ```
+
+- Button roots have `data-pressed` while the pad is held.
+- Debugger messages have `data-type` (`controller`, `note_on`, ...).
+- `DeviceSelector` has `data-state` (`loading`, `error`, `ready`); its device buttons have `data-state` (`connected`, `disconnected`) and `data-selected`.
+
+### `className`, `style` and `classNames`
+
+`className` and `style` go on the root element. `classNames` adds classes to individual parts, which works well with Tailwind or CSS Modules:
+
+```jsx
+<KnobComponent
+  ccNumber={74}
+  label="Cutoff"
+  className="rounded-xl bg-zinc-900 p-4"
+  classNames={{ dial: "border-zinc-700", value: "text-orange-400" }}
+/>
+```
+
+| Component | Parts |
+| --- | --- |
+| `SliderComponent` | `root`, `label`, `track`, `fill`, `thumb`, `value` |
+| `KnobComponent` | `root`, `label`, `dial`, `indicator`, `value` |
+| `ButtonComponent` | `root`, `pad`, `inner`, `label`, `value` |
+| `DebuggerComponent` | `root`, `header`, `title`, `clearButton`, `messages`, `message`, `empty` |
+| `DeviceSelector` | `root`, `title`, `list`, `device`, `deviceName`, `deviceManufacturer`, `deviceStatus`, `status`, `action`, `empty`, `error` |
+| `MidiControlPanel` | `root`, `grid` |
+
+### Fully Custom UI
+
+For a completely different look, skip the components and use the hooks, which return plain values:
+
+```jsx
+const cutoff = useSlider({ ccNumber: 74, range: [0, 1] })
+
+return <MyKnob value={cutoff} />
 ```
 
 ## Configuration Options
@@ -168,6 +256,10 @@ Map MIDI values (0-127) to any range:
 // Percentage (0% to 100%)
 <SliderComponent range={[0, 100]} />
 ```
+
+### Message Types
+
+`parseMIDIMessage` returns a `MIDIMessage` whose `type` is one of `note_on`, `note_off`, `poly_aftertouch`, `controller`, `program_change`, `channel_aftertouch`, `pitch_bend` (14-bit `value`, 8192 is center), or a system message (`sysex`, `timing_clock`, `start`, `stop`, ...). Channel messages include `channel` (1-16).
 
 ## Browser Support
 

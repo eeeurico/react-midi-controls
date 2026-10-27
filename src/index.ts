@@ -37,7 +37,17 @@ export type {
   KnobComponentProps,
   ButtonComponentProps,
   DebuggerComponentProps,
+  DeviceSelectorProps,
   MidiControlPanelProps,
+
+  // Styling types
+  StylingProps,
+  SliderPart,
+  KnobPart,
+  ButtonPart,
+  DebuggerPart,
+  DeviceSelectorPart,
+  MidiControlPanelPart,
 
   // Context types
   MidiContextType,

@@ -1,29 +1,34 @@
 import React from "react"
 import { useButton } from "../hooks/useButton"
+import { cx } from "../utils/styling"
+import type { ButtonComponentProps } from "../hooks/types"
+import "./theme.css"
 import "./MidiControls.css"
-
-interface ButtonComponentProps {
-  ccNumber: number
-  label: string
-  defaultValue?: boolean
-}
 
 export const ButtonComponent: React.FC<ButtonComponentProps> = ({
   ccNumber,
+  channel,
   label,
   defaultValue = false,
+  className,
+  style,
+  classNames,
 }) => {
-  const isPressed = useButton({ ccNumber, defaultValue })
+  const isPressed = useButton({ ccNumber, channel, defaultValue })
 
   return (
-    <div className={`midi-button ${isPressed ? "pressed" : ""}`}>
-      <div className="button-circle">
-        <div className="button-inner" />
+    <div
+      className={cx("rmc-button", className, classNames?.root)}
+      style={style}
+      data-pressed={isPressed ? "" : undefined}
+    >
+      <div className={cx("rmc-button__pad", classNames?.pad)}>
+        <div className={cx("rmc-button__inner", classNames?.inner)} />
       </div>
-      <label>
+      <label className={cx("rmc-button__label", classNames?.label)}>
         {label} (CC{ccNumber})
       </label>
-      <div className="button-value">
+      <div className={cx("rmc-button__value", classNames?.value)}>
         Value: {isPressed ? "Pressed" : "Released"}
       </div>
     </div>

@@ -25,15 +25,15 @@ export default defineConfig(({ mode }) => {
           entry: "src/index.ts",
           name: "ReactMidiControls",
           formats: ["es", "cjs"],
-          fileName: (format) => `index.${format === "es" ? "es" : "cjs"}.js`,
+          fileName: (format) => (format === "es" ? "index.js" : "index.cjs"),
+          cssFileName: "style",
         },
         rollupOptions: {
-          external: ["react", "react-dom"],
+          // Match subpaths too, so react/jsx-runtime isn't bundled
+          external: [/^react($|\/)/, /^react-dom($|\/)/],
           output: {
-            globals: {
-              react: "React",
-              "react-dom": "ReactDOM",
-            },
+            // Hooks and context need to run on the client in React Server Components apps
+            banner: '"use client";',
           },
         },
         sourcemap: true,

@@ -18,5 +18,12 @@ export default tseslint.config([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      // MidiContext exports its hook alongside the provider
+      "react-refresh/only-export-components": [
+        "error",
+        { allowExportNames: ["useMidiContext"] },
+      ],
+    },
   },
 ])
